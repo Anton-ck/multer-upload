@@ -17,23 +17,26 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^8.51.0",
-    "eslint-config-prettier": "^9.0.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-config-standart": "^0.2.0",
-    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.1.1",
-    "nodemon": "^3.0.1"
+    "eslint-plugin-promise": "^6.6.0",
+    "nodemon": "^3.1.9"
   },
   "dependencies": {
+    "album-art": "^4.0.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "fs": "^0.0.1-security",
-    "mongodb": "^6.1.0",
-    "mongoose": "^7.6.0",
+    "jimp": "^1.6.0",
+    "mongoose": "^7.8.6",
     "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "music-metadata": "^11.0.2"
   }
 }

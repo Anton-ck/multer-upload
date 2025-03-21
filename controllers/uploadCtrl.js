@@ -1,33 +1,51 @@
-import Song from "../models/songModel.js";
-import HttpError from "../helpers/HttpError.js";
-import ctrlWrapper from "../helpers/ctrlWrapper.js";
+import path from 'path';
+
+import Song from '../models/songModel.js';
+import HttpError from '../helpers/HttpError.js';
+import ctrlWrapper from '../helpers/ctrlWrapper.js';
+import getId3Tags from '../helpers/id3Tags.js';
+import trackPictureService from '../services/tracksService/trackPictureService.js';
+import createSong from '../services/tracksService/trackCreateService.js';
+
+const getAllMusic = async (req, res) => {
+  const allMusic = await Song.find({});
+
+  res.json({ allMusic });
+};
 
 const uploadMusic = async (req, res) => {
-  console.log(req.file.path);
-
-  if (!req.file) {
-    throw HttpError(404, "File not found for upload");
+  if (!req.files) {
+    throw HttpError(404, 'File not found for upload');
   }
+  const allSongs = req.files;
 
-  const songURL = req.file.path;
+  const songs = allSongs.map(async (song) => {
+    const { common, format } = await getId3Tags(song.path);
 
-  const newSong = await Song.create({
-    ...req.body,
+    const { artist, title, album, picture } = common;
+    const { duration } = format;
+
+    const pictureData = picture?.[0];
+
+    const trackPictureURL = await trackPictureService(pictureData, {
+      artist,
+      album,
+    });
+
+    return await createSong(
+      artist,
+      title,
+      duration,
+      song.path,
+      trackPictureURL,
+    );
   });
+  const result = await Promise.all(songs);
 
-  const payload = {
-    id: newSong._id,
-  };
-
-  // await Song.updateMany({ songURL });
-
-  await Song.findByIdAndUpdate(newSong._id, { songURL });
-
-  await res.json({
-    songURL,
-  });
+  res.json({ result });
 };
 
 export default {
+  getAllMusic: ctrlWrapper(getAllMusic),
   uploadMusic: ctrlWrapper(uploadMusic),
 };
